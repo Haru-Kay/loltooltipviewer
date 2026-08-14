@@ -1,0 +1,16 @@
+AllCops:
+  NewCops: enable
+  Exclude:
+    - 'JoiPlay/**/*'
+    - '.git/**/*'
+    - '.idea/**/*'
+    - '*/*text.rb'
+  TargetRubyVersion: 3.1
+  SuggestExtensions: false
+
+# This cop should not exist, the output is way too ugly.
+Layout/LineLength:
+  Enabled: false
+
+Layout/CaseIndentation:
+  IndentOneStep: true
