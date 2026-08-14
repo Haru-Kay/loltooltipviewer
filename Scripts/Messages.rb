@@ -1051,7 +1051,19 @@ def toUnformattedText(text)
   text.gsub!(/&amp;/, "&")
   text.gsub!(/<(\/?)(font|font color)(\s*\=\s*([^>]*))?>/, "")
   text.gsub!(/<(\/?)(lol-uikit-tooltipped-keyword)( key|)(\s*\=\s*([^>]*))?>/, "")
-  text.gsub!(/%(i)(:([^>].*?))%/, "")
+  while text[/%(i)(:([^>].*?))%/]
+    m = $~.dup
+    icon = m[3].downcase
+    icon.gsub!("scale", "")
+    icon.gsub!("active", "")
+    icon.gsub!("mini", "")
+    icon = "" unless [
+      "augment", "cooldown", "coins", "melee", "adaptiveforce", "onhit", "ranged", "ad", "ap", "apen",
+      "armor", "as", "crit", "critmult", "healshield", "health", "hpregen", "level", "ls", "mana",
+      "manaregen", "mpen", "mr", "ms", "range", "size", "sv", "tenacity", "statanvil"
+    ].include?(icon)
+    text = (m.pre_match + " #{icon} " + m.post_match).gsub("  ", " ")
+  end
   return text
 end
 
