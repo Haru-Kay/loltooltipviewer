@@ -78,9 +78,13 @@ class BaseScene
 
   def searchAugments(text)
     @curSearch = text
-    return AugmentCache.keys.dup.sort_by { |s| AugmentCache.augments[s].name } if text == ""
+    return AugmentCache.keys.sort_by { |s| AugmentCache.augments[s].name } if text == ""
 
-    return AugmentCache.keys.dup.filter { |s| AugmentCache.augments[s].name.downcase.include?(@curSearch) }.sort_by { |s| AugmentCache.augments[s].name }
+    ret = AugmentCache.keys.filter { |s|
+      AugmentCache.augments[s].name.downcase.include?(@curSearch) || toUnformattedText(AugmentCache.augments[s].tooltip).downcase.include?(@curSearch)
+    }.sort_by { |s| AugmentCache.augments[s].name }
+
+    return ret
   end
 
   def updateMouse(oldmouse, oldscroll)
@@ -95,30 +99,9 @@ class BaseScene
       @augments.each { |t| t.y += realdiff } if realdiff != 0
     end
 
-    # if Input.triggerex?(:DOWN)
-    #   displayIndex = (displayIndex + 1) % $s.length
-    #   diff = $s[displayIndex].y
-    #   $s.each { |t| t.y -= diff }
-    # end
-    # if Input.triggerex?(:UP)
-    #   displayIndex = (displayIndex - 1) % $s.length
-    #   diff = 0 - $s[displayIndex].y
-    #   $s.each { |t| t.y += diff }
-    # end
-
-    # if Input.triggerex?(:PAGEDOWN)
-    #   displayIndex = (displayIndex + 5) % $s.length
-    #   diff = $s[displayIndex].y
-    #   $s.each { |t| t.y -= diff }
-    # end
-    # if Input.triggerex?(:PAGEUP)
-    #   displayIndex = (displayIndex - 5) % $s.length
-    #   diff = 0 - $s[displayIndex].y
-    #   $s.each { |t| t.y += diff }
-    # end
     if scroll != oldscroll
-      if $s[0].y + (16 * scroll) <= 0
-        $s.each { |t| t.y += (16 * scroll) }
+      if @augments[0].y + (72 * scroll) <= 0
+        @augments.each { |t| t.y += (72 * scroll) }
       end
     end
 

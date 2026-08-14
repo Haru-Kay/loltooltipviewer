@@ -1049,6 +1049,9 @@ def toUnformattedText(text)
   text.gsub!(/&apos;/, "'")
   text.gsub!(/&quot;/, "\"")
   text.gsub!(/&amp;/, "&")
+  text.gsub!(/<(\/?)(font|font color)(\s*\=\s*([^>]*))?>/, "")
+  text.gsub!(/<(\/?)(lol-uikit-tooltipped-keyword)( key|)(\s*\=\s*([^>]*))?>/, "")
+  text.gsub!(/%(i)(:([^>].*?))%/, "")
   return text
 end
 
