@@ -1040,6 +1040,11 @@ def messageDisplay(msgwindow, message, letterbyletter = true, commandProc = nil)
 end
 
 FORMATREGEXP = /<(\/?)([Cc]|[Cc][2]|[Cc][33]|[Gg][Rr]|[Ll][Hh]|[Oo]|[Ff][Nn]|[Bb][Rr]|[Ll][Ii]|[Ff][Ss]|[Ii]|[Bb]|[Rr]|[Pp][Gg]|[Pp][Oo][Gg]|[Uu]|[Ss]|[Ii][Cc][Oo][Nn]|[Ii][Mm][Gg]|[Aa][Cc]|[Aa][Rr]|[Aa][Ll]|[Oo][Uu][Tt][Ll][Nn]|[Oo][Uu][Tt][Ll][Nn][2])(\s*\=\s*([^>]*))?>/
+VALID_IMAGE_STRINGS = [
+  "augment", "cooldown", "coins", "melee", "adaptiveforce", "onhit", "ranged", "ad", "ap", "apen",
+  "armor", "as", "crit", "critmult", "healshield", "health", "hpregen", "level", "ls", "mana",
+  "manaregen", "mpen", "mr", "ms", "range", "size", "sv", "tenacity", "statanvil"
+]
 
 def toUnformattedText(text)
   text = text.dup
@@ -1057,11 +1062,7 @@ def toUnformattedText(text)
     icon.gsub!("scale", "")
     icon.gsub!("active", "")
     icon.gsub!("mini", "")
-    icon = "" unless [
-      "augment", "cooldown", "coins", "melee", "adaptiveforce", "onhit", "ranged", "ad", "ap", "apen",
-      "armor", "as", "crit", "critmult", "healshield", "health", "hpregen", "level", "ls", "mana",
-      "manaregen", "mpen", "mr", "ms", "range", "size", "sv", "tenacity", "statanvil"
-    ].include?(icon)
+    icon = "" unless VALID_IMAGE_STRINGS.include?(icon)
     text = (m.pre_match + " #{icon} " + m.post_match).gsub("  ", " ")
   end
   return text

@@ -90,5 +90,56 @@ end
 def setTitleFont(bitmap)
   bitmap = bitmap.bitmap if !bitmap.is_a?(Bitmap)
   bitmap.font.name = "Gill Sans MT Pro"
-  bitmap.font.size = 26
+  bitmap.font.size = 28
+end
+
+def highlightTextPos(bitmap, chars, highlight, color = TooltipBase::SEARCHCOLOR)
+  return if highlight.nil?
+
+  unformatted = chars.map { |c|
+    next c[0].downcase unless c[5]
+    icon = c[5].dup.downcase.split("/")[-1]
+    icon.gsub!("scale", "")
+    icon.gsub!("active", "")
+    icon.gsub!("mini", "")
+    next VALID_IMAGE_STRINGS.include?(icon) ? icon : c[0].downcase
+  }
+
+  locs = []
+
+  startpos = 0
+  i = 0
+  highlightLen = highlight.length
+  str = ""
+  image = false
+  while i < unformatted.length
+    str += unformatted[i]
+    image = true if unformatted[i].length > 1
+
+    if str.length >= highlightLen
+      inc = 1
+      if str == highlight || (image && str.start_with?(highlight))
+        inc = highlightLen
+
+        locs.push([startpos, i])
+      end
+
+      str = ""
+      startpos += inc
+      i = startpos
+      image = false
+    else
+      i += 1
+    end
+  end
+
+  locs.each { |loc|
+    s, e = loc
+    x = chars[s][1]
+    y = chars[s][2]
+    height = chars[s][4]
+    width = chars[e][1] + chars[e][3] - x
+
+    bitmap.fill_rect(x, y, width, height, TooltipBase::SEARCHCOLOR)
+  }
 end

@@ -116,7 +116,7 @@ class BaseScene
         y = @augments.length > 0 ? @augments[-1].y + @augments[-1].height + 8 : 0
         @augments << AugmentTooltip.new(@augmentList[@augments.length], 0, y, @augmentViewport)
       }
-      if @augments.length == @augmentList.length
+      if @augments.length == @augmentList.length #|| true
         puts Time.now - $loadtime
         @loaded = true
         @elements[:loading].dispose
@@ -135,6 +135,7 @@ class BaseScene
         tooltip.y = height
         height += tooltip.height + 8
         tooltip.visible = true
+        tooltip.highlight(@curSearch)
       else
         tooltip.visible = false
       end
