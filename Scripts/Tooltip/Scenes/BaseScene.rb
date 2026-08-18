@@ -22,6 +22,11 @@ class BaseScene
     @elements[:txtSearch] = SearchBar.new(0, @elements[:btn1].height - SearchBar::HEIGHT)
     @curSearch = @elements[:txtSearch].text
 
+    @elements[:cbHighlight] = Checkbox.new(false, 0, 42)
+    @elements[:lbHighlight] = Label.new("Highlight Search", 0, 42)
+    @elements[:lbHighlight].x = @elements[:txtSearch].x - @elements[:lbHighlight].width - 6
+    @elements[:cbHighlight].x = @elements[:lbHighlight].x - @elements[:cbHighlight].width - 6
+
     @augmentList = AugmentCache.keys.sort_by { |s| AugmentCache.augments[s].name }
     @augments = []
     @loaded = false
@@ -37,10 +42,15 @@ class BaseScene
     @augmentViewport.z = 10
   end
 
+  def shouldHighlight?
+    return @elements[:cbHighlight].value
+  end
+
   def main
     mouse = [0, 0]
     scroll = 0
     while true
+      highlight = self.shouldHighlight?
       ensureAugments()
       Graphics.update
       Input.update
@@ -48,6 +58,10 @@ class BaseScene
 
       if @loaded
         mouse, scroll = updateMouse(mouse, scroll)
+
+        if self.shouldHighlight? != highlight
+          updateAugments
+        end
       end
     end
   end
@@ -135,7 +149,7 @@ class BaseScene
         tooltip.y = height
         height += tooltip.height + 8
         tooltip.visible = true
-        tooltip.highlight(@curSearch)
+        tooltip.highlight(@curSearch, self.shouldHighlight?)
       else
         tooltip.visible = false
       end

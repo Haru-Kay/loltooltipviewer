@@ -123,14 +123,14 @@ class TooltipBase < UIElement
     @sprites.each { |_, s| s.visible = value == true }
   end
 
-  def highlight(text)
+  def highlight(text, showHighlight = true)
     @curHeight = SPACING
     #return if !@sprites[:highlight] && text.length < 3
     text = nil if text == ""
 
     @sprites[:highlight].bitmap.clear if @sprites[:highlight]
     @sprites[:titlehighlight].bitmap.clear if @sprites[:titlehighlight]
-    return if text.nil?
+    return if text.nil? || !showHighlight
 
     if @title
       createTitle(type: :titlehighlight) if !@sprites[:titlehighlight]
