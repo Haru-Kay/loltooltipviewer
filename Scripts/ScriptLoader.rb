@@ -130,7 +130,6 @@ module ThreadLoader
 
   def self.startLoadingRuntimeData
     @@augmentLoadThread = Thread.new {
-      AugmentCache.load
       $cached = true
     }
   end
@@ -160,6 +159,7 @@ end
 ThreadLoader.startLoadingScripts
 ThreadLoader.awaitScripts
 AugmentCache.load
+AugmentCache.save if !File.exist?("Data/mayhem.dat")
 
 $softReset = false
 begin

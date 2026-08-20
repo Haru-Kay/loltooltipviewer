@@ -8,16 +8,16 @@ class BaseScene
     @elements[:btn1].width = 120
     @elements[:btn1].selected = true
     @elements[:btn1].refresh(true)
-    @elements[:btn2] = MenuTab.new("Classic-ish", @elements[:btn1].width + @elements[:btn1].x, 0)
-    @elements[:btn2].width = 120
-    @elements[:btn2].enabled = false
-    @elements[:btn3] = MenuTab.new("Arena", @elements[:btn2].width + @elements[:btn2].x, 0)
-    @elements[:btn3].width = 120
-    @elements[:btn3].enabled = false
+    # @elements[:btn2] = MenuTab.new("Classic-ish", @elements[:btn1].width + @elements[:btn1].x, 0)
+    # @elements[:btn2].width = 120
+    # @elements[:btn2].enabled = false
+    # @elements[:btn3] = MenuTab.new("Arena", @elements[:btn2].width + @elements[:btn2].x, 0)
+    # @elements[:btn3].width = 120
+    # @elements[:btn3].enabled = false
 
     @elements[:bg].bitmap.fill_rect(0, @elements[:btn1].height - 1, Graphics.width, 1, Color.new(60, 60, 65))
 
-    @tabs = [@elements[:btn1], @elements[:btn2], @elements[:btn3]]
+    @tabs = [@elements[:btn1]]#, @elements[:btn2], @elements[:btn3]]
     @tabsel = 0
     @elements[:txtSearch] = SearchBar.new(0, @elements[:btn1].height - SearchBar::HEIGHT)
     @curSearch = @elements[:txtSearch].text
@@ -71,16 +71,16 @@ class BaseScene
     @elements.each { |_, e| e.update }
     state = @tabs.map { |tab| tab.selected }
     if state != oldstate
-      state.each_with_index { |value, i|
-        if value && value != oldstate[i]
-          @tabsel = i
-          @tabs.each_with_index { |tab, j|
-            tab.selected = false unless j == i
-            tab.refresh(true)
-          }
-          break
-        end
-      }
+      # state.each_with_index { |value, i|
+      #   if value && value != oldstate[i]
+      #     @tabsel = i
+      #     @tabs.each_with_index { |tab, j|
+      #       tab.selected = false unless j == i
+      #       tab.refresh(true)
+      #     }
+      #     break
+      #   end
+      # }
     end
 
     if @loaded && @elements[:txtSearch].text != @curSearch
