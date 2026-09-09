@@ -3,7 +3,7 @@ class AbilityResourceByCoefficientCalculationPart < CalculationObject
 
   def is_numeric?
     return @numeric if @numeric
-    dv = AugmentCache[@apiName].dataValues[@mCoefficient]
+    dv = $cache.augments[@apiName].dataValues[@mCoefficient]
     if dv.is_a?(Numeric)
       self.numeric = true
       self.quickEval = dv

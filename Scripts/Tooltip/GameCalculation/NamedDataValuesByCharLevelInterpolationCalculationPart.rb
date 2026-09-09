@@ -8,8 +8,8 @@ class NamedDataValuesByCharLevelInterpolationCalculationPart < CalculationObject
   end
 
   def to_s(percent = false, precision = nil, multiplier: 1)
-    sv = AugmentCache[@apiName].dataValues[@mDataValueStart]
-    ev = AugmentCache[@apiName].dataValues[@mDataValueEnd]
+    sv = $cache.augments[@apiName].dataValues[@mDataValueStart]
+    ev = $cache.augments[@apiName].dataValues[@mDataValueEnd]
     multiplierText = ""
     if multiplier.is_a?(Numeric) || multiplier.is_numeric?
       sv *= multiplier

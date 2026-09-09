@@ -1,13 +1,12 @@
 class Checkbox < UIElement
-  attr_reader :value
-  def initialize(value, x, y, viewport = nil)
+  attr_accessor :value
+  def initialize(x, y, viewport = nil)
     super(x, y, viewport)
-    @value = value
-    @width = 14
-    @height = 14
+    @width = 84
+    @height = 84
     @fill = @height * 2
     @value = false
-    self.setBitmap("Graphics/UI/checkbox-spritesheet.png")
+    self.setBitmap("Graphics/UI/checkbox.png")
     self.src_rect = Rect.new(0, 0, @width, @height)
   end
 

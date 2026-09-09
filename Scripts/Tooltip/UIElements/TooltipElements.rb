@@ -33,11 +33,8 @@ class TooltipBase < UIElement
   def createIcon(path = "Graphics/Icons/default")
     return if path.nil?
     @icon = true
-    @sprites[:icon] = TooltipIcon.new(@viewport)
-    @sprites[:icon].setBitmap(path)
+    @sprites[:icon] = Image.new(path, self.x + SPACING, @curHeight + self.y, @viewport)
     @sprites[:icon].scale = 64.0 / @sprites[:icon].bitmap.width
-    @sprites[:icon].x = self.x + SPACING
-    @sprites[:icon].y = @curHeight + self.y
     @sprites[:icon].z = 10
   end
 
@@ -140,29 +137,13 @@ class TooltipBase < UIElement
     createIconLine(text, type: :highlight) if @icon
     drawBody(@bodyText, text, type: :highlight) if @body
   end
-
-  class TooltipIcon < IconSprite
-    def width
-      return (self.bitmap.width * self.zoom_x).to_i
-    end
-
-    def height
-      return (self.bitmap.height * self.zoom_y).to_i
-    end
-
-    def scale=(value)
-      @scale = value
-      self.zoom_x = value
-      self.zoom_y = value
-    end
-  end
 end
 
 class AugmentTooltip < TooltipBase
   attr_accessor :augment
   def initialize(augment, x, y, viewport = nil)
     super(x, y, TooltipBase::WIDTH, TooltipBase::HEIGHT, viewport)
-    @augment = AugmentCache.augments[augment]
+    @augment = $cache.augments[augment]
     iconpath = @augment.icon.downcase[...-4].split("/")[-1]
     createIcon("Graphics/Images/#{iconpath}.png")
     createTitle()

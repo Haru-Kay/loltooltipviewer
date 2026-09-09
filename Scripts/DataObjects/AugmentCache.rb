@@ -1,0 +1,2 @@
+$missingIcons ||= []
+$missingValues ||= []

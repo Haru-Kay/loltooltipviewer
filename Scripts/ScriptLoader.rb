@@ -13,18 +13,13 @@ $:.push('gems')
 # Let Net::HTTP know where to look for cacert file
 ENV['SSL_CERT_FILE'] = 'cacert.pem'
 
-# https://joiplay.net/forum/d/25-printp-act-as-msgbox-in-vx-ace-games/2
 def dp(message)
-  msgbox(message) if $joiplay
-  print(message) if !$joiplay
+  print(message)
 end
 
 def fileExists?(file)
   # System.file_exist? respects paths defined in "patches" directive in mkxp.json, unlike File.exist?.
   return System.file_exist?(file) if defined?(System.file_exist?)
-
-  # JoiPlay however doesn't use mkxp.json, nor does it have a System.file_exist? so we need to use ugly workaround.
-  return File.exist?(file) || File.exist?("patch/" + file)
 end
 
 class Reset < Exception
@@ -121,16 +116,10 @@ module ThreadLoader
     }
   end
 
-  def self.startLoadingMainMenuData
-  end
-
-  def self.augmentLoadThread
-    @@augmentLoadThread
-  end
-
-  def self.startLoadingRuntimeData
-    @@augmentLoadThread = Thread.new {
-      $cached = true
+  def self.startLoadingCache
+    @@cacheThread = Thread.new {
+      $cache.load
+      @@scriptLoadThread&.join
     }
   end
 
@@ -140,7 +129,9 @@ module ThreadLoader
     puts (Time.now - $boottime)
   end
 
-  def self.awaitMainMenuData
+  def self.awaitCache
+    @@cacheThread&.join
+    @@cacheThread = nil
   end
 
   def self.awaitRuntimeData
@@ -149,17 +140,21 @@ module ThreadLoader
     puts (Time.now - $boottime)
   end
 end
-
 # Load base game scripts
 INIT.each do |path|
   next if path.nil?
-  loadScript('Scripts/' + path + '.rb')
+  path = 'Scripts/' + path unless path.start_with?('Scripts/')
+  path = path + '.rb' unless path.end_with?('.rb')
+  loadScript(path)
 end
 
 ThreadLoader.startLoadingScripts
 ThreadLoader.awaitScripts
-AugmentCache.load
-AugmentCache.save if !File.exist?("Data/mayhem.dat")
+unless $cache
+  $cache = LOLCache.new
+  ThreadLoader.startLoadingCache
+  ThreadLoader.awaitCache
+end
 
 $softReset = false
 begin

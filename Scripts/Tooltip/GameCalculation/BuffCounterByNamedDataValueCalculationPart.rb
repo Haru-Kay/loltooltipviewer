@@ -8,9 +8,9 @@ class BuffCounterByNamedDataValueCalculationPart < CalculationObject
 
   def to_s(percent = false, precision = nil, multiplier: 1)
     if multiplier.is_a?(Numeric) || multiplier.is_numeric?
-      return numberFormat(AugmentCache[@apiName].dataValues[@mDataValue] * multiplier) + " per %i:iconDefault%"
+      return numberFormat($cache.augments[@apiName].dataValues[@mDataValue] * multiplier) + " per %i:iconDefault%"
     else
-      return numberFormat(AugmentCache[@apiName].dataValues[@mDataValue]) + " per %i:iconDefault%" + " * " + multiplier.to_s(percent, precision)
+      return numberFormat($cache.augments[@apiName].dataValues[@mDataValue]) + " per %i:iconDefault%" + " * " + multiplier.to_s(percent, precision)
     end
   end
 end

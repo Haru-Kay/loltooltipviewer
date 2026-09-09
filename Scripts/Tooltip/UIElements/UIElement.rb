@@ -38,11 +38,23 @@ class UIElement < SpriteWrapper
     return @height
   end
 
+  def real_x
+    ret = self.x
+    ret += self.viewport.rect.x if self.viewport
+    return ret
+  end
+
+  def real_y
+    ret = self.y
+    ret += self.viewport.rect.y if self.viewport
+    return ret
+  end
+
   def mouseOver?
     mousepos = Mouse::getMousePos(true)
 
     return false if !mousepos
-    return mousepos[0].between?(self.x, self.x + self.width) && mousepos[1].between?(self.y, self.y + self.height)
+    return mousepos[0].between?(self.real_x, self.real_x + self.width) && mousepos[1].between?(self.real_y, self.real_y + self.height)
   end
 
   def dispose

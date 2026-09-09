@@ -544,7 +544,7 @@ def getFormattedText(
     icon = $~[3]
     icon.downcase! if icon == "Cooldown"
     text = $~.pre_match + "<icon=#{icon}>" + $~.post_match
-    $missingIcons.push([@augment["name"], icon]) if !resolveBitmap("Graphics/Icons/#{icon}")
+    $missingIcons.push([icon]) if !resolveBitmap("Graphics/Icons/#{icon}")
   end
   while text[FORMATREGEXP]
     if ["icon", "img"].include?($~[2].downcase)

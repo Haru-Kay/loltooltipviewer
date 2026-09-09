@@ -7,9 +7,9 @@ class AbilityResourceByNamedDataValueCalculationPart < CalculationObject
 
   def to_s(percent = false, precision = nil, multiplier: 1)
     if multiplier.is_a?(Numeric) || multiplier.is_numeric?
-      return numberFormat(AugmentCache[@apiName].dataValues[@DataValue] * multiplier) + " %i:scaleMana%"
+      return numberFormat($cache.augments[@apiName].dataValues[@DataValue] * multiplier) + " %i:scaleMana%"
     else
-      return numberFormat(AugmentCache[@apiName].dataValues[@DataValue]) + " %i:scaleMana%" + " * " + multiplier.to_s(percent, precision)
+      return numberFormat($cache.augments[@apiName].dataValues[@DataValue]) + " %i:scaleMana%" + " * " + multiplier.to_s(percent, precision)
     end
   end
 end

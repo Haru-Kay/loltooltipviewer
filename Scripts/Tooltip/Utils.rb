@@ -1,3 +1,9 @@
+module AugmentRarities
+  Silver = 0
+  Gold = 1
+  Prismatic = 2
+end
+
 class CalculationObject
   attr_accessor :quickEval
   attr_accessor :numeric

@@ -11,7 +11,8 @@ INIT = [
   'SpriteResizer',
 
   'RTP',
-
+] + Dir.glob("Scripts/DataObjects/*") + [
+  'Compilers',
   'BitmapCache',
   'Window',
   'SpriteWindow',
@@ -20,6 +21,7 @@ INIT = [
   'Options',
   'System',
 
+  'Cache',
   'Main',
 ]
 
@@ -35,7 +37,9 @@ SCRIPTS = [
 
   'Tooltip/Colors',
   'Scripts/Tooltip/UIElements/UIElement',
-  'Scripts/Tooltip/Scenes/BaseScene'
-] + Dir.glob("Scripts/Tooltip/GameCalculation/*") + Dir.glob("Scripts/Tooltip/Augments/*") +
+  'Scripts/Tooltip/UIElements/Image',
+  'Scripts/Tooltip/UIElements/ScrollableContainer'
+
+] + Dir.glob("Scripts/Tooltip/GameCalculation/*") + Dir.glob("Scripts/Tooltip/Scenes/*") +
   Dir.glob("Scripts/Tooltip/UIElements/*") #+ Dir.glob("Scripts/Tooltip/Scenes/*")
 

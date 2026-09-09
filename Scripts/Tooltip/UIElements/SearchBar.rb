@@ -6,14 +6,16 @@ class SearchBar < UIElement
   HEIGHT = 36
   OFFSET = 6
 
-  def initialize(x, y, viewport = nil)
-    super(Graphics.width - WIDTH + x, y, viewport)
+  def initialize(x, y, width, height, viewport = nil)
+    #super(Graphics.width - WIDTH + x, y, viewport)
+    super(x, y, viewport)
     @focus = false
     @sprites = {}
-    @width = WIDTH
-    @height = HEIGHT
-    @sprites[:bg] = SpriteWindow_Base.new(self.x, self.y, WIDTH, HEIGHT)
-    @sprites[:bg].z = 0
+    #@width = WIDTH
+    @width = width
+    @height = height
+    @sprites[:bg] = SpriteWindow_Base.new(self.x, self.y, width, height, viewport)
+    @sprites[:bg].z = 1
 
     scale = 0.33
     @sprites[:icon] = IconSprite.new(self.x + OFFSET, self.y + OFFSET, viewport)
@@ -56,6 +58,7 @@ class SearchBar < UIElement
     @frame %= 40
     self.refresh if ((@frame % 20) == 0)
     if Input.triggerex?(Input::LeftMouseKey)
+      mousepos = Mouse::getMousePos(true)
       if self.mouseOver?
         @sprites[:fillerText].visible = false
         @focus = true

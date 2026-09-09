@@ -19,144 +19,16 @@ def mainFunctionNoGraphics
   scene = BaseScene.new
   scene.main
 
-  return
-  begin
-
-    $t = {}
-
-
-    $s = []
-    oldmouse = [0, 0]
-    oldscroll = 0
-    augmentIndex = 0
-    displayIndex = 0
-    redraw = false
-    n = false
-    debug = false
-
-    time = Time.now
-
-    if debug
-      $s.push(AugmentTooltip.new(AugmentCache[216], true))
-      $s.push(AugmentTooltip.new(AugmentCache[220], true))
-      $s[-1].y += $s[-2].y + $s[-2].height + 8
-    end
-
-    while !n
-      if $s.length < AugmentCache.length && !debug
-        20.times {
-          break if $s.length >= AugmentCache.length
-          t = AugmentTooltip.new(AugmentCache.values[augmentIndex], true)
-
-          if !$s.empty?
-            t.y += $s[-1].y + $s[-1].height + 8
-          end
-          $s.push(t)
-          augmentIndex += 1
-        }
-      else
-        if !$loaded
-          $loaded = true
-          puts Time.now - time
-        end
-        if Input.triggerex?(:Q)
-          redraw = true
-          $s.sort_by! { |t| t.augment["id"] }
-        end
-        if Input.triggerex?(:W)
-          redraw = true
-          $s.sort_by! { |t| t.augment["name"] }
-        end
-        if Input.triggerex?(:E)
-          redraw = true
-          $s.sort_by! { |t| t.augment["rarity"] }
-        end
-        if Input.triggerex?(:R)
-          redraw = true
-          $s.sort_by! { |t| t.augment["apiName"] }
-        end
-        if redraw
-          $s.each_with_index { |t, i|
-            newY = i == 0 ? 0 : ($s[i - 1].y + $s[i - 1].height + 8)
-            t.y = newY
-          }
-          redraw = false
-        end
-      end
-
-      if Input.triggerex?(:F)
-        begin
-          Input.text_input = true
-          $past_texts = [] if !$past_texts
-          code = messageFreeText("Use arrow keys for previous searches.", $past_texts[-1] || "", 999, Graphics.width, $past_texts).downcase
-          $past_texts.unshift(code) unless code == ""
-          $past_texts.uniq!
-          search = $s[(displayIndex + 1)..].find { |f| f.augment.id.to_s == code || f.augment.name.downcase.include?(code) || f.augment.apiName.downcase.include?(code) || f.augment.tooltip.downcase.include?(code) }
-          search ||= $s[0..displayIndex].find { |f| f.augment.id.to_s == code || f.augment.name.downcase.include?(code) || f.augment.apiName.downcase.include?(code) || f.augment.tooltip.downcase.include?(code) }
-          if search
-            i = $s.index(search)
-            diff = $s[i].y - $s[displayIndex].y
-            $s.each { |t| t.y -= diff }
-            displayIndex = i
-          else
-            showMessage("No results")
-          end
-          Input.text_input = false
-        rescue
-          logError($!, display: true)
-          Input.text_input = false
-        end
-      end
-
-
+  loop do
+    begin
       Graphics.update
       Input.update
-
-      mouse = Mouse::getMousePos(true)
-      scroll = Input.scroll_v
-
-      if Input.pressex?(Input::LeftMouseKey)
-        realdiff = mouse[1] - oldmouse[1]
-        if $s[0].y + realdiff > 0
-          realdiff = 0 - $s[0].y
-        end
-        $s.each { |t| t.y += realdiff } if realdiff != 0
-      end
-
-      if Input.triggerex?(:DOWN)
-        displayIndex = (displayIndex + 1) % $s.length
-        diff = $s[displayIndex].y
-        $s.each { |t| t.y -= diff }
-      end
-      if Input.triggerex?(:UP)
-        displayIndex = (displayIndex - 1) % $s.length
-        diff = 0 - $s[displayIndex].y
-        $s.each { |t| t.y += diff }
-      end
-
-      if Input.triggerex?(:PAGEDOWN)
-        displayIndex = (displayIndex + 5) % $s.length
-        diff = $s[displayIndex].y
-        $s.each { |t| t.y -= diff }
-      end
-      if Input.triggerex?(:PAGEUP)
-        displayIndex = (displayIndex - 5) % $s.length
-        diff = 0 - $s[displayIndex].y
-        $s.each { |t| t.y += diff }
-      end
-      if scroll != oldscroll
-        if $s[0].y + (16 * scroll) <= 0
-          $s.each { |t| t.y += (16 * scroll) }
-        end
-      end
-
-      oldmouse = mouse
-      oldscroll = scroll
+    rescue
+      p $!
     end
-
-  rescue Hangup
-    raise
   end
+
+  return
 end
 
 def getAugmentImage(iconpath)

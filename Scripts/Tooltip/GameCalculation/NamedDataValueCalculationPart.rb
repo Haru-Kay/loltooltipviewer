@@ -8,7 +8,7 @@ class NamedDataValueCalculationPart < CalculationObject
 
   def is_numeric?
     return @numeric if @numeric
-    dv = AugmentCache[@apiName].dataValues[@mDataValue]
+    dv = $cache.augments[@apiName].dataValues[@mDataValue]
     if dv.is_a?(Numeric)
       self.numeric = true
       self.quickEval = dv
@@ -19,9 +19,9 @@ class NamedDataValueCalculationPart < CalculationObject
 
   def to_s(percent = false, precision = nil, multiplier: 1)
     if multiplier.is_a?(Numeric) || multiplier.is_numeric?
-      return numberFormat(AugmentCache[@apiName].dataValues[@mDataValue] * multiplier, percent, precision)
+      return numberFormat($cache.augments[@apiName].dataValues[@mDataValue] * multiplier, percent, precision)
     else
-      return numberFormat(AugmentCache[@apiName].dataValues[@mDataValue], percent, precision) + " * " + multiplier.to_s(percent, precision)
+      return numberFormat($cache.augments[@apiName].dataValues[@mDataValue], percent, precision) + " * " + multiplier.to_s(percent, precision)
     end
   end
 end

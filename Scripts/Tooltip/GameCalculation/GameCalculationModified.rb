@@ -6,6 +6,6 @@ class GameCalculationModified < CalculationObject
   attr_accessor :tooltipOnly
 
   def to_s(percent = false, precision = nil)
-    return AugmentCache[@apiName].calcs[@mModifiedGameCalculation].to_s(multiplier: @mMultiplier)
+    return $cache.augments[@apiName].calcs[@mModifiedGameCalculation].to_s(multiplier: @mMultiplier)
   end
 end

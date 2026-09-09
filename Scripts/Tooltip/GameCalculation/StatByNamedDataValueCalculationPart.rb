@@ -12,9 +12,9 @@ class StatByNamedDataValueCalculationPart < CalculationObject
 
   def to_s(percent = false, precision = nil, multiplier: 1)
     if multiplier.is_a?(Numeric) || multiplier.is_numeric?
-      return numberFormat(AugmentCache[@apiName].dataValues[@mDataValue] * multiplier, true, precision) + " " + getStatDisplay(@mStat, @mStatFormula)
+      return numberFormat($cache.augments[@apiName].dataValues[@mDataValue] * multiplier, true, precision) + " " + getStatDisplay(@mStat, @mStatFormula)
     else
-      return numberFormat(AugmentCache[@apiName].dataValues[@mDataValue], true, precision) + " " + getStatDisplay(@mStat, @mStatFormula) + " * " + multiplier.to_s(percent, precision)
+      return numberFormat($cache.augments[@apiName].dataValues[@mDataValue], true, precision) + " " + getStatDisplay(@mStat, @mStatFormula) + " * " + multiplier.to_s(percent, precision)
     end
   end
 end
