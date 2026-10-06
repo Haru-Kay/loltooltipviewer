@@ -1,15 +1,15 @@
 class NamedDataValuesByCharLevelInterpolationCalculationPart < CalculationObject
-  attr_accessor :mDataValueStart
-  attr_accessor :mDataValueEnd
+  attr_accessor :StartDataValue
+  attr_accessor :EndDataValue
   def initialize(*args)
     super
-    @mDataValueStart.downcase!
-    @mDataValueEnd.downcase!
+    @StartDataValue.downcase!
+    @EndDataValue.downcase!
   end
 
   def to_s(percent = false, precision = nil, multiplier: 1)
-    sv = AugmentCache[@apiName].dataValues[@mDataValueStart]
-    ev = AugmentCache[@apiName].dataValues[@mDataValueEnd]
+    sv = AugmentCache[@apiName].dataValues[@StartDataValue]
+    ev = AugmentCache[@apiName].dataValues[@EndDataValue]
     multiplierText = ""
     if multiplier.is_a?(Numeric) || multiplier.is_numeric?
       sv *= multiplier

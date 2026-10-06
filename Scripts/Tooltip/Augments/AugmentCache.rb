@@ -35,27 +35,31 @@ module AugmentCache
           cachename = iconpath.split("/")[-1]
           img = nil
 
-          if !File.exist?("Graphics/Images/" + iconpath + ".png")
-            iconpath = "https://raw.communitydragon.org/pbe/game/" + iconpath + ".png"
-            uri = URI(iconpath)
-            Net::HTTP.start(uri.host, uri.port, :use_ssl => uri.scheme == 'https') do |http|
-
-              http.request(Net::HTTP::Get.new(uri)) do |response|
-                if response.is_a?(Net::HTTPSuccess)
-                  img = response.read_body
-                  #puts 'Successfully got file'
-                else
-                  puts "FAILED TO FETCH FILE: #{response.code} #{response.message}"
-                  $missingIcons.push(cachename)
+          if !File.exist?("Graphics/Images/" + cachename + ".png")
                   aug.icons = [
                     "ASSETS/UX/Kiwi/Augments/Icons/GenericAbilityAugmentIcon_#{aug.rarity}.tex",
                     "ASSETS/UX/Kiwi/Augments/Icons/GenericAbilityAugmentIcon_#{aug.rarity}.tex"
                   ]
-                end
-              end
-            end
+            # iconpath = "https://raw.communitydragon.org/pbe/game/" + iconpath + ".png"
+            # uri = URI(iconpath)
+            # Net::HTTP.start(uri.host, uri.port, :use_ssl => uri.scheme == 'https') do |http|
 
-            File.binwrite("Graphics/Images/" + cachename + ".png", img)
+            #   http.request(Net::HTTP::Get.new(uri)) do |response|
+            #     if response.is_a?(Net::HTTPSuccess)
+            #       img = response.read_body
+            #       #puts 'Successfully got file'
+            #     else
+            #       puts "FAILED TO FETCH FILE: #{response.code} #{response.message}"
+            #       $missingIcons.push(cachename)
+            #       aug.icons = [
+            #         "ASSETS/UX/Kiwi/Augments/Icons/GenericAbilityAugmentIcon_#{aug.rarity}.tex",
+            #         "ASSETS/UX/Kiwi/Augments/Icons/GenericAbilityAugmentIcon_#{aug.rarity}.tex"
+            #       ]
+            #     end
+            #   end
+            # end
+
+            # File.binwrite("Graphics/Images/" + cachename + ".png", img)
           end
         end
       }

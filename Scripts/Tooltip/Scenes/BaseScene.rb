@@ -27,7 +27,8 @@ class BaseScene
     @elements[:lbHighlight].x = @elements[:txtSearch].x - @elements[:lbHighlight].width - 6
     @elements[:cbHighlight].x = @elements[:lbHighlight].x - @elements[:cbHighlight].width - 6
 
-    @augmentList = AugmentCache.keys.sort_by { |s| AugmentCache.augments[s].name }
+    #@augmentList = AugmentCache.keys.sort_by { |s| AugmentCache.augments[s].name }
+    @augmentList = AugmentCache.keys.select { |s| AugmentCache.augments[s].id > 3000 }.sort_by { |s| AugmentCache.augments[s].name }
     @augments = []
     @loaded = false
     @elements[:loading] = BitmapSprite.new(Graphics.width, Graphics.height - @elements[:btn1].height)

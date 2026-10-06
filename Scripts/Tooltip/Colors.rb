@@ -120,6 +120,10 @@ FORMATTING = {
   TFTGuildInactive: { color: "696969" },
   TFTbold: { color: "ffffff" },
   TFTBonus: { color: "FFE384" },
+  energy: { color: "DDDD77" },
+  charge: { color: "DDDD77" },
+  release: { color: "DDDD77" },
+  prismatic: { color: "F4DE1A" },
 }
 
 FORMATREGEXP = /<(\/?)(#{FORMATTING.keys.map { |k| Regexp.escape(k) }.join("|")}|li|[Cc]|[Cc][2]|[Cc][33]|[Gg][Rr]|[Ll][Hh]|[Oo]|[Ff][Nn]|[Bb][Rr]|[Ff][Ss]|[Ii]|[Bb]|[Rr]|[Pp][Gg]|[Pp][Oo][Gg]|[Uu]|[Ss]|[Ii][Cc][Oo][Nn]|[Ii][Mm][Gg]|[Aa][Cc]|[Aa][Rr]|[Aa][Ll]|[Oo][Uu][Tt][Ll][Nn]|[Oo][Uu][Tt][Ll][Nn][2])(\s*\=\s*([^>]*))?>/
