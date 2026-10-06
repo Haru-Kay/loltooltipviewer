@@ -10,6 +10,9 @@ class RangedModifiableGameCalculation < CalculationObject
   def to_s(percent = false, precision = nil, multiplier: 1)
     melee = ""
     ranged = ""
+    rangedMult = multiplier
+    rangedMult = multiplier.quickEval if multiplier.respond_to?(:quickEval)
+    rangedMult *= @mRangedMultiplier.quickEval
     if @mFormulaParts.all? { |s| s.is_numeric? } && @mRangedMultiplier.is_numeric?
       total = 0
       @mFormulaParts.each { |s| total += s.quickEval }
@@ -19,7 +22,9 @@ class RangedModifiableGameCalculation < CalculationObject
       melee += numberFormat(total, @mDisplayAsPercent, @mPrecision)
       melee += "</c>"
 
-      ranged = numberFormat(total * @mRangedMultiplier.quickEval, @mDisplayAsPercent, @mPrecision)
+      ranged += color
+      ranged += numberFormat(total * rangedMult, @mDisplayAsPercent, @mPrecision)
+      ranged += "</c>"
     else
       @mFormulaParts.each_with_index { |s, i|
         color = "<c=F0E6D2>"
@@ -28,12 +33,14 @@ class RangedModifiableGameCalculation < CalculationObject
           color = "<c=#{stat[:color]}>"
         end
         melee += color
-        melee += " +" if i != 0
+        melee += " + " if i != 0
         melee += s.to_s(@mDisplayAsPercent, @mPrecision, multiplier: multiplier)
-        ranged = melee.dup
         melee += "</c>"
 
-        ranged += " * " + @mRangedMultiplier.to_s(@mDisplayAsPercent, @mPrecision, multiplier: multiplier)
+        ranged += color
+        ranged += " + " if i != 0
+        ranged += s.to_s(@mDisplayAsPercent, @mPrecision, multiplier: rangedMult)
+        ranged += "</c>"
       }
     end
     return "(" + melee + " %i:meleeActive% | " + ranged + " %i:rangedActive% )"
